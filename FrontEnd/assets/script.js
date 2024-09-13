@@ -89,13 +89,15 @@ function generateFilter(category) {
 // Créer un bouton avec le nom de la catégogie
   const button=document.createElement("button");
   button.innerText=category.name;
-  // filters.appendChild(button);
   // Ajouter un évènement au clic du bouton qui déclenche le filtrage avec l'id de la catégorie (en utilisant filterWorks)
   button.addEventListener("click", () => {
     const filteredWorks=filterWorks(data.works, category.id);
-    return(filteredWorks);
+    // Changement des styles CSS au clic sur le filtre
+    button.style.backgroundColor = "#1D6154";
+    button.style.color = "white";
+    // return(filteredWorks);
   })
-  // Retourner le bouton.
+  // Retourner le bouton
   return button;
 }
 
