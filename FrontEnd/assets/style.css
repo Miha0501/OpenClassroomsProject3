@@ -85,6 +85,59 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
+h3 {
+	display: flex;
+	justify-content: center;
+	font-family: 'Syne';
+	font-size: 30px;
+	font-weight: 700;
+	color:#1D6154;
+	width: 100%;
+	height: 36px;
+	margin-top: 242px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	gap:25px;
+	margin-top:50px;
+	margin-bottom: 200px;
+}
+ .login {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	height: 100%;
+	padding:0px 530px 0px 530px;
+	gap: 10px;
+}
+input {
+height: 30px;
+border: none;
+box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.button {
+	color: #FFFEF8;
+	background-color: #1D6154;
+	cursor: pointer;
+}
+
+.active {
+	color: white;
+	background: #1D6154;
+}
+
+.forgotpassword {
+	text-decoration: underline;
+}
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -105,12 +158,17 @@ a {
 	text-decoration: none;
 	color: black;
 }
-a:hover {
+nav a:hover {
 	color: #B1663C;
 }
-nav img {
+nav li img {
 height: 20px;
 }
+
+nav li img:hover {
+	color: #B1663C;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -217,5 +275,8 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+.loginfooter ul{
+	background-color: white;
 }
 

@@ -44,7 +44,8 @@ function renderWorks(works) {
     // Ajouter la "figure" à la galerie
     gallery.appendChild(fig);
   }
-}
+} 
+
 
 // Fonction pour générer une "figure" de travail.
 function generateWork(work) {
@@ -72,11 +73,11 @@ function generateWork(work) {
 function renderFilters(categories) {
 // Création de l'icône pour "Tous".
   filters.innerHTML = "";
-  // const all = { id: 0, name: "Tous" }; A POSER LA QUESTION!!!!!!!!
+  
   const all = { id: 0, name: "Tous" };
   const filterAll=generateFilter(all);
   filters.appendChild(filterAll);
-  // filters.appendChild(generatFilter(filterAll)); ????????
+  
 // Boucler sur les catégories pour créer chaque filtre (avec generateFilter) et l'ajouter au DOM.
   for (const category of categories){
     const button=generateFilter(category);
@@ -89,12 +90,28 @@ function generateFilter(category) {
 // Créer un bouton avec le nom de la catégogie
   const button=document.createElement("button");
   button.innerText=category.name;
+  button.setAttribute("id", category.name);
+  button.setAttribute("name", "category");
   // Ajouter un évènement au clic du bouton qui déclenche le filtrage avec l'id de la catégorie (en utilisant filterWorks)
   button.addEventListener("click", () => {
     const filteredWorks=filterWorks(data.works, category.id);
+    renderWorks(filteredWorks);
     // Changement des styles CSS au clic sur le filtre
-    button.style.backgroundColor = "#1D6154";
-    button.style.color = "white";
+    // button.classList.add("active"); // Création d'une classe pour le bouton
+    if(button.classList.contains('active')===true) {
+      button.classList.remove("active");
+    }else{
+      button.classList.add("active");
+      // remove all active class of other button
+      const categories = document.querySelectorAll(`[name*="category"]`);
+      categories.forEach(elt => {
+        if(elt.id !== category.name && elt.classList.contains('active')) {
+          elt.classList.remove("active");
+        }
+      })
+    }
+  
+    console.log(button.classList);
     // return(filteredWorks);
   })
   // Retourner le bouton
@@ -108,7 +125,8 @@ function filterWorks(works, categoryId) {
     return works;
   }
   // Retourner les travaux filtrer par catégorie (en utilisant la méthode 'filter' en comparant le categoryId du travail avec le categoryID fourni en paramètre)
-    return works.filter(work => work.categoryId === categoryId);
+  const filteredCategories =  works.filter(work => work.categoryId === categoryId);
+  return filteredCategories;
 }
 
 // @TODO : Créer une fonction dédiée à l'affichage du mode édition.
