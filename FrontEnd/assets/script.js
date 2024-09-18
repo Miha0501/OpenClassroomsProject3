@@ -13,11 +13,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   data.works = await getWorks();
   renderWorks(data.works);
   data.categories = await getCategories();
-  // @TODO : Récupérer le jeton d'authentification depuis le localStorage.
-  
-  // @TODO : Si un jeton est présent, alors on n'affiche pas les filtres...
-  // ... mais on affiche les éléments du mode édition.
-  // ... sinon, on affiche les filtres.
+  // Récupérer le jeton d'authentification depuis le localStorage.
+  const token=localStorage.getItem("token");
+  // Si un jeton est présent, alors on n'affiche pas les filtres...
+  if (token) {
+    const filters = document.querySelector(".filters"); // Sélection des éléments contenant les filtres
+    filters.style.display = "none"; 
+  // ... mais on affiche les éléments du mode édition 
+  editDisplayMode();
+  }else{
+  //... sinon, on affiche les filtres
+  const loginLogout=document.getElementById("login-logout");
+  loginLogout.textContent="login";
+  renderFilters();
+  generateFilter();
+  }
   renderFilters(data.categories);
 });
 
@@ -47,7 +57,6 @@ function renderWorks(works) {
   }
 } 
 
-
 // Fonction pour générer une "figure" de travail.
 function generateWork(work) {
   // Générer la structure HTML d'un travail.
@@ -63,7 +72,6 @@ function generateWork(work) {
 }
 
 // Un "<div class="filters"></div>" a été crée dans le fihier index.html
-
 // Fonction pour afficher les filtres de catégories.
 function renderFilters(categories) {
 // Création de l'icône pour "Tous".
@@ -105,9 +113,7 @@ function generateFilter(category) {
         }
       })
     }
-  
     console.log(button.classList);
-    // return(filteredWorks);
   })
     // Retourner le bouton
     return button;
@@ -124,4 +130,14 @@ function filterWorks(works, categoryId) {
   return filteredCategories;
 }
 
-// @TODO : Créer une fonction dédiée à l'affichage du mode édition.
+// Créer une fonction dédiée à l'affichage du mode édition.
+function editDisplayMode() {
+  // Enlever la classe .hidden aux éléments cachès qui doivent être visible en mode édition
+  const editMode=document.querySelectorAll(".hidden");
+  editMode.forEach(elt => {
+  elt.classList.remove("hidden");
+}) 
+  // Transformer l'URL de navigation en logout
+  const loginLogout=document.getElementById("login-logout");
+  loginLogout.textContent="logout";
+}

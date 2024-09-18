@@ -57,20 +57,25 @@ body {
 header {
 	display: flex;
 	justify-content: space-between;
+	flex-direction: column;
 	margin: 50px 0
 }
 section {
 	margin: 50px 0
+}
+
+.header-login {
+	display: flex;
+	flex-direction: row;
 }
 .header-edition-mode {
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
 	width: 100%;
-	margin: 0 0 50px 0;
 }
 
-.edition-container {
+#edition-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -83,6 +88,10 @@ section {
 	justify-content: center;
 	color: white;
 	gap: 10px;
+}
+
+ .hidden {
+	display: none !important;
 }
 
 .header-items {
@@ -229,13 +238,18 @@ nav li img:hover {
 	justify-content: center;
 	gap:20px;
 }
-.projects-modification {
+#edit-project {
 	display: flex;
 	justify-content: center;
 	font-size: 16px;
 	gap: 8px;
 	padding-top: 12px;
+	border: none;
+	color: black;
+	font-weight: normal;
+	cursor: pointer;
 }
+
 .gallery {
 	width: 100%;
 	display: grid;

@@ -12,21 +12,20 @@
         <script src="assets/login.js" defer></script>
     </head>
 <body>
-    <header>
+    <header class="header-login">
         <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
         <nav>
             <ul>
                 <li><a href="./index.html">projets</a></li>
-                <li><a href="#contact">contact</a></li>
+                <li><a href="./index.html#contact">contact</a></li>
                 <li><a href="./login.html">login</a></li>
                 <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
             </ul>
         </nav>
     </header>
-    <main>
+<main>
         <h3> Log in</h3>
-        <form method="post" action="'http://localhost:5678/api/users/login'" id="loginForm">
-            <input type="hidden" name="_token" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4">
+        <form method="post" action="#" id="loginForm">
             <div class="login">
                 <label for="email">E-mail</label>
                 <input type="email" name="email" id="email" required>
@@ -36,20 +35,21 @@
                 <input type="text" name="password" id="password" required>
             </div>
             <div>
-                <button type="submit" class="button">Se connecter</button>
+                <button type="submit" class="button" value="Se connecter">Se connecter</button>
             </div>
+            <div id="error-message" style="color: red; display: none;"></div>
             <div class="forgotpassword">
                 <a href="#">Mot de passe oublié</a>
             </div>
         </form>
-        <p id="error-message"></p>
-    </main>
-    <footer class="loginfooter">
-        <nav>
-            <ul>
-                <li>Mentions Légales</li>
-            </ul>
-        </nav>
-    </footer>
+    </section>
+</main>
+<footer class="loginfooter">
+    <nav>
+        <ul>
+            <li>Mentions Légales</li>
+        </ul>
+    </nav>
+</footer>
 </body>
 </html>
