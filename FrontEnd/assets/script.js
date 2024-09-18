@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderWorks(data.works);
   data.categories = await getCategories();
   // @TODO : Récupérer le jeton d'authentification depuis le localStorage.
+  
   // @TODO : Si un jeton est présent, alors on n'affiche pas les filtres...
   // ... mais on affiche les éléments du mode édition.
   // ... sinon, on affiche les filtres.
@@ -39,10 +40,10 @@ function renderWorks(works) {
   gallery.innerHTML = "";
   // Boucler sur les travaux.
   for (const work of works) {
-    //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail.
-    const fig = generateWork(work);
-    // Ajouter la "figure" à la galerie
-    gallery.appendChild(fig);
+  //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail.
+  const fig = generateWork(work);
+  // Ajouter la "figure" à la galerie
+  gallery.appendChild(fig);
   }
 } 
 
@@ -50,12 +51,6 @@ function renderWorks(works) {
 // Fonction pour générer une "figure" de travail.
 function generateWork(work) {
   // Générer la structure HTML d'un travail.
-  /*
-              <figure>
-                <img src="URL DE L'IMAGE" alt="TITLE">
-                <figcaption>TITLE</figcaption>
-            </figure>
-   */
   let newFig = document.createElement("figure");
   let newImg = document.createElement("img");
   newImg.src = work.imageUrl;
@@ -72,11 +67,10 @@ function generateWork(work) {
 // Fonction pour afficher les filtres de catégories.
 function renderFilters(categories) {
 // Création de l'icône pour "Tous".
-  filters.innerHTML = "";
-  
-  const all = { id: 0, name: "Tous" };
-  const filterAll=generateFilter(all);
-  filters.appendChild(filterAll);
+  filters.innerHTML = ""; // S'assurer que la partie filtres est vide
+  const all = { id: 0, name: "Tous" }; // Attribuer un id différent des autres categories et un name
+  const filterAll=generateFilter(all); // Generer la "category" 
+  filters.appendChild(filterAll); // L'ajouter à la div filters
   
 // Boucler sur les catégories pour créer chaque filtre (avec generateFilter) et l'ajouter au DOM.
   for (const category of categories){
@@ -90,6 +84,7 @@ function generateFilter(category) {
 // Créer un bouton avec le nom de la catégogie
   const button=document.createElement("button");
   button.innerText=category.name;
+  button.style.cursor="pointer";
   button.setAttribute("id", category.name);
   button.setAttribute("name", "category");
   // Ajouter un évènement au clic du bouton qui déclenche le filtrage avec l'id de la catégorie (en utilisant filterWorks)
@@ -98,11 +93,11 @@ function generateFilter(category) {
     renderWorks(filteredWorks);
     // Changement des styles CSS au clic sur le filtre
     // button.classList.add("active"); // Création d'une classe pour le bouton
-    if(button.classList.contains('active')===true) {
+    if(button.classList.contains("active")===true) {
       button.classList.remove("active");
     }else{
       button.classList.add("active");
-      // remove all active class of other button
+      // Enlever la classe active des autre boutons
       const categories = document.querySelectorAll(`[name*="category"]`);
       categories.forEach(elt => {
         if(elt.id !== category.name && elt.classList.contains('active')) {
@@ -114,8 +109,8 @@ function generateFilter(category) {
     console.log(button.classList);
     // return(filteredWorks);
   })
-  // Retourner le bouton
-  return button;
+    // Retourner le bouton
+    return button;
 }
 
 // Fonction pour filtrer les travaux par catégorie.
