@@ -1,3 +1,10 @@
+
+// Recuperation des données via l'API
+async function getWorks() {
+  const response = await fetch(API_URL + "/works");
+  return await response.json();
+}
+
 // VARIABLES ET CONSTANTES~
 const API_URL = "http://localhost:5678/api";
 const data = {
@@ -6,39 +13,26 @@ const data = {
 };
 const gallery = document.querySelector(".gallery");
 const filters = document.querySelector(".filters");
+const authLink = document.getElementById("login-logout");
 
 
 // LOGIQUE~
 document.addEventListener("DOMContentLoaded", async () => {
+  // Récupérer le jeton d'authentification depuis le localStorage.
+  const token = localStorage.getItem("token");
+  // Si un jeton est présent, alors on affiche le mode édition.
+  token && renderEditionMode();
+  // Changer le texte du bouton de connexion/déconnexion en fonction de la présence du jeton.
+  authLink.textContent = token ? "logout" : "login";
+  // Récupérer les travaux et les catégories via l'API et les afficher...
   data.works = await getWorks();
   renderWorks(data.works);
   data.categories = await getCategories();
-  // Récupérer le jeton d'authentification depuis le localStorage.
-  const token=localStorage.getItem("token");
-  // Si un jeton est présent, alors on n'affiche pas les filtres...
-  if (token) {
-    const filters = document.querySelector(".filters"); // Sélection des éléments contenant les filtres
-    filters.style.display = "none"; 
-  // ... mais on affiche les éléments du mode édition 
-  editDisplayMode();
-  }else{
-  //... sinon, on affiche les filtres
-  const loginLogout=document.getElementById("login-logout");
-  loginLogout.textContent="login";
-  renderFilters();
-  generateFilter();
-  }
-  renderFilters(data.categories);
+  // ... seulement si l'utilisateur n'est pas connecté (pour les filtres de catégories).
+  !token &&  renderFilters(data.categories);
 });
 
-
-// FONCTIONS~
-// Recuperation des données via l'API
-async function getWorks() {
-  const response = await fetch(API_URL + "/works");
-  return await response.json();
-}
-
+// Récupération des donée (categories) via l'API
 async function getCategories() {
   const response = await fetch(API_URL + "/categories");
   return await response.json();
@@ -76,8 +70,8 @@ function generateWork(work) {
 function renderFilters(categories) {
 // Création de l'icône pour "Tous".
   filters.innerHTML = ""; // S'assurer que la partie filtres est vide
-  const all = { id: 0, name: "Tous" }; // Attribuer un id différent des autres categories et un name
-  const filterAll=generateFilter(all); // Generer la "category" 
+  const all = { id: 0, name: "Tous", class: "active" }; // Attribuer un id différent des autres categories et un name
+  const filterAll = generateFilter(all); // Generer la "category"
   filters.appendChild(filterAll); // L'ajouter à la div filters
   
 // Boucler sur les catégories pour créer chaque filtre (avec generateFilter) et l'ajouter au DOM.
@@ -93,30 +87,20 @@ function generateFilter(category) {
   const button=document.createElement("button");
   button.innerText=category.name;
   button.style.cursor="pointer";
-  button.setAttribute("id", category.name);
-  button.setAttribute("name", "category");
+  button.setAttribute("id", category.name);//
+  button.setAttribute("name", "category");//
+  category.class && button.classList.add(category.class);//
   // Ajouter un évènement au clic du bouton qui déclenche le filtrage avec l'id de la catégorie (en utilisant filterWorks)
   button.addEventListener("click", () => {
     const filteredWorks=filterWorks(data.works, category.id);
     renderWorks(filteredWorks);
     // Changement des styles CSS au clic sur le filtre
-    // button.classList.add("active"); // Création d'une classe pour le bouton
-    if(button.classList.contains("active")===true) {
-      button.classList.remove("active");
-    }else{
-      button.classList.add("active");
-      // Enlever la classe active des autre boutons
-      const categories = document.querySelectorAll(`[name*="category"]`);
-      categories.forEach(elt => {
-        if(elt.id !== category.name && elt.classList.contains('active')) {
-          elt.classList.remove("active");
-        }
-      })
-    }
-    console.log(button.classList);
-  })
-    // Retourner le bouton
-    return button;
+    // Création d'une classe pour le bouton
+    document.querySelector(".active").classList.remove("active");
+    button.classList.add("active");
+  });
+  // Retourner le bouton
+  return button;
 }
 
 // Fonction pour filtrer les travaux par catégorie.
@@ -126,18 +110,25 @@ function filterWorks(works, categoryId) {
     return works;
   }
   // Retourner les travaux filtrer par catégorie (en utilisant la méthode 'filter' en comparant le categoryId du travail avec le categoryID fourni en paramètre)
-  const filteredCategories =  works.filter(work => work.categoryId === categoryId);
-  return filteredCategories;
+  return works.filter(work => work.categoryId === categoryId);
 }
 
 // Créer une fonction dédiée à l'affichage du mode édition.
-function editDisplayMode() {
+function renderEditionMode() {
   // Enlever la classe .hidden aux éléments cachès qui doivent être visible en mode édition
-  const editMode=document.querySelectorAll(".hidden");
-  editMode.forEach(elt => {
-  elt.classList.remove("hidden");
-}) 
+  document.querySelectorAll(".hidden").forEach(elt => {
+    elt.classList.remove("hidden");
+  });
+
+// Cacher les filtres.
+document.querySelector(".filters").classList.add("hidden");
   // Transformer l'URL de navigation en logout
-  const loginLogout=document.getElementById("login-logout");
-  loginLogout.textContent="logout";
+  authLink.addEventListener("click", (event) => {
+    // Empêcher le comportement de navigation par défaut.
+    event.preventDefault();
+    // Supprimer le token du localStorage.
+    localStorage.removeItem("token");
+    // Recharger la page.
+    window.location.reload();
+  });
 }
