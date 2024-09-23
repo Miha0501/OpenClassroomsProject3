@@ -33,7 +33,6 @@ document.body.addEventListener('click', (event) => {
  }
 });
 
-
   // Fonction pour afficher les travaux.
 function renderWorksModal(works) {
     const gallery = document.querySelector(".gallery-modal");
@@ -51,13 +50,58 @@ function renderWorksModal(works) {
   // Fonction pour générer une "figure" de travail.
   function generateWorkModal(work) {
     // Générer la structure HTML d'un travail.
-    let newFig = document.createElement("figure");
-    let newImg = document.createElement("img");
-    newImg.src = work.imageUrl;
-    newImg.alt = work.title;
-    // let newFigcaption = document.createElement("figcaption");
-    // newFigcaption.innerText = work.title;
-    newFig.appendChild(newImg);
-    // newFig.appendChild(newFigcaption);
-    return newFig;
+  let newFig = document.createElement("figure");
+  let newImg = document.createElement("img");
+  newImg.src = work.imageUrl;
+  newImg.alt = work.title;
+  // Créer le bouton de suppression sur chaque travail
+  const deleteBtn = document.createElement("button");
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+  newFig.appendChild(newImg);
+  newFig.appendChild(deleteBtn);
+  // Supprimer un travail lors du click sur la poubelle
+  deleteBtn.addEventListener("click", () => {
+    const modalGallery=document.querySelector(".gallery-modal");
+    modalGallery.appendChild(newFig);
+    modalGallery.removeChild(newFig);
+    });
+  return newFig;
   }
+
+  // Fonction pour afficher le bouton "Ajouter une photo"
+  function renderPhotoBtn () {
+    const addBtn=generatePhotoBtn();
+  }
+
+  // Foction pour générer le bouton "Ajouter une photo"
+  function generatePhotoBtn () {
+    const modalBody=document.querySelector(".modal-body");
+    // Créer le bouton
+    const addBtn=document.createElement("button");
+    addBtn.innerText="Ajouter une photo";
+    addBtn.classList.add("active");
+    addBtn.style.cursor="pointer";
+    // Ajouter le bouton dans la modal
+    modalBody.appendChild(addBtn);
+
+    addBtn.addEventListener("click", () => {
+      // Ajouter la classe "active" au bouton quand au click
+      addBtn.classList.add("active");
+      modal.close();
+      innerModal.showModal();
+    });
+    return addBtn;
+  }
+  
+  // Appeler la fonction pour afficher le bouton
+  renderPhotoBtn();
+
+
+// FONTIONS INNER MODAL
+  const btnAjouterPhoto = document.getElementById("add-photo");
+  const inputPhoto = document.getElementById("photo");
+  
+  btnAjouterPhoto.addEventListener("click", () => {
+    inputPhoto.click(); // Simuler le clic sur l'élément input file
+  });
