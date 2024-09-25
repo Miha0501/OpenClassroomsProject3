@@ -97,29 +97,34 @@
 				    <i class="fa-solid fa-arrow-left"></i>
 			    </div>
 				<h3 id="modal-title">Ajout photo</h3>
-			    <div id="closeModalBtn" class="close">
+			    <div id="closeInnerModalBtn" class="close">
 				    <i class="fa-solid fa-xmark"></i>
 			    </div>
 			</div>
 			<div class="inner-modal-body">
-			    <div class="inner-modal-add-picture">
-                    <i class="fa-regular fa-image"></i>
-				    <button id="add-photo">+ Ajouter photo
-				    <input type="file" id="photo" name="photo" accept="image/png, image/jpeg" />
-				    </button>
-				    <p>jpeg, png: 4mo max</p>
-				</div>
-				<form class="add-photo-title">
-				<label for="title">Titre</label>
-                <input type="text" id="title" name="title" required/>
+				<form id="form-add-picture">
+					<div class="inner-modal-add-picture">
+						<i class="fa regular fa-image"></i>
+						<!-- <input type="file" id="photo" name="photo" accept="image/png, image/jpeg" />
+						<p>jpeg, png: 4mo max</p> -->
+						<button class="input-photo">
+							<input type="file" id="photo" name="photo" accept="image/png, image/jpeg" />
+							<span>+ Ajouter photo</span>
+						</button>
+						<p>jpeg, png: 4mo max</p>
+					</div>
+					<form class="add-photo-title">
+						<div class="new-photo-title">
+					         <label for="title">Titre</label>
+                	         <input type="text" id="title" name="title" required/>
+					<div class="chose-category">
+						<label for="category">Catégorie</label>
+						<select id="categories" name="category">
+						</select>
+					</div>
+					<div class="decoration-line"></div>
+					<input type="submit" value="Valider"/>
 				</form>
-				<div class="chose-category">
-				    <label for="category">Catégorie</label>
-				    <select id="category" name="category">
-					    <option value="categories"></option>
-				    </select>
-				</div>
-				<div class="decoration-line"></div>
 			</div>
 		</div>
 	</dialog>

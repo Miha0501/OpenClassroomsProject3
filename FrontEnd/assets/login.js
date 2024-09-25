@@ -2,8 +2,7 @@
 const formUser=document.getElementById("loginForm");
 
 document.addEventListener("DOMContentLoaded", async () => {
-    localStorage.removeItem("token");
-
+    
     formUser.addEventListener("submit", async (event) => {
         // Désactivation du comportement par défaut du navigateur
         event.preventDefault();
@@ -35,6 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const data=await response.json();
                 const token=data.token;
             // Stocker le token dans le localStorage.
+                localStorage.removeItem("token");
                 window.localStorage.setItem("token", token);
             //Redirection vers la page d'accueil
                 window.location.href="./index.html";
