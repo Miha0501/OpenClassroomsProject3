@@ -5,6 +5,7 @@ const innerModal = document.querySelector("#inner-modal");
 const openButton = document.querySelector("#edit-project");
 const closeButton = document.querySelector("#closeModalBtn");
 
+
 // Ouvrir le modal en cliquant sur le bouton
 openButton.addEventListener('click', async () => {
   modal.showModal();
@@ -149,10 +150,27 @@ closeArrow.addEventListener('click', async () => {
   modal.showModal();
 });
 
+// Affichage de la photo
+document.getElementById("photo").addEventListener("change", function (event) {
+  const file=event.target.files[0]; // Récuperer le fichier
+  const viewPhoto=document.getElementById("view-photo"); //Cibler l'image
+
+  const reader=new FileReader(); // Créer un objet FileReader (lire le contenu du fichier en local sans envoie au serveur et le convertit en URL des donnée)
+  // Affichage de l'image après chargement
+  reader.onload= function (e) {
+    viewPhoto.src=e.target.result; // la source de l'image
+    viewPhoto.style.display="block"; // afficher l'image
+    if (file) {
+    reader.readAsDataURL(file); // lire le fichier en tant qu'URL de données
+    }
+  }
+})
+
 // Fonction pour uploader une photo
 function uploadPhoto (event) {
   console.log("inside photo");
-       event.preventDefault();
+       event.preventDefault(); // Empêcher le rechargement de la page après la soumission du formulaire pour gérer les donées en JS
+       // Cibler les éléments pour la récuperation des valeurs
         const file = document.getElementById("photo").files[0];
         let category = document.getElementById("categories");
         let categoryId = category.options[category.selectedIndex].value;
@@ -163,7 +181,7 @@ function uploadPhoto (event) {
     formData.append("image", file);
     formData.append("title", title);
     formData.append("category", categoryId);
-    
+  // Envoyer les données à l'API via une requête POST  
   fetch('http://localhost:5678/api/works', {
     method: "POST",
     body:formData,
@@ -173,21 +191,42 @@ function uploadPhoto (event) {
   })
   .then(response =>  {
         if(response.ok) {
-        const newPicture = response.json();
-        // add new picture to the dom
+          console.log ("Photo chargée avec succès");
+          return response.json();
+        }else{
+          throw new Error("Une erreur est survenue lors de l'envoi de la photo");
         }
-      }
-      )
-      .catch(error => {
-        console.error(error);
+      })
+  .then(data => {
+      addNewPicture(imageURL);
+  })
+    .catch(error => {
+      console.error(error);
       });
 }
 
+// Fonction pour exécuter la fonction uploadPhoto à chaque fois que l'utilisateur clic sur le bouton submit
   function addSumitForm() {
       const myform = document.getElementById('form-add-picture');
-      if (myform.attachEvent) {
-          myform.attachEvent("submit", uploadPhoto);
-      } else {
           myform.addEventListener("submit", uploadPhoto);
-      }
+  }
+
+  // Fontion pour ajouter la nouvelle photo dans la galerie de la page d'édition et de la modale
+  function addNewPicture (imageURL) {
+    // Récuperation des deux galeries
+    const gallery = document.querySelector(".gallery");
+    const galleryModal=document.querySelector(".gallery-modal");
+// Création du nouveau élément image
+  let newFig = document.createElement("figure");
+  let newImg = document.createElement("img");
+  newImg.src = work.imageUrl;
+  newImg.alt = work.title;
+  let newFigcaption = document.createElement("figcaption");
+  newFigcaption.innerText = work.title;
+  newFig.appendChild(newImg);
+  newFig.appendChild(newFigcaption);
+ // Attacher la nouvelle figure à la galérie de la page édition et de la modale
+  gallery.appendChild(newFig);
+  galleryModal.appendChild(newFig);
+  return newFig;
   }
