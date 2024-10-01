@@ -95,6 +95,10 @@ section {
 	display: none !important;
 }
 
+#image-upload {
+	display: none;
+}
+
 .header-items {
 	display: flex;
 	justify-content: space-between;
@@ -496,6 +500,7 @@ aside #inner-modal {
 } 
 #form-add-picture input[type="submit"] {
 	background-color: #A7A7A7;
+	margin-top: ;
 }
   
 .fa-image {
@@ -516,7 +521,7 @@ aside #inner-modal {
 	gap: 15px;
 
 }
-#categories {
+#category {
 	height: 30px;
     border: none;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);

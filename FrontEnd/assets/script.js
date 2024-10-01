@@ -26,9 +26,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   authLink.textContent = token ? "logout" : "login";
   // Récupérer les travaux et les catégories via l'API et les afficher...
   data.works = await getWorks();
+  console.log(data.works);
   renderWorks(data.works);
   data.categories = await getCategories();
-  // ... seulement si l'utilisateur n'est pas connecté (pour les filtres de catégories).
+  // Si le token n'est pas défini ou à une valeur false, appeler la fonction renderFilters, seulement si l'utilisateur n'est pas connecté (pour les filtres de catégories).
   !token &&  renderFilters(data.categories);
 });
 
@@ -123,7 +124,7 @@ function renderEditionMode() {
 // Cacher les filtres.
 document.querySelector(".filters").classList.add("hidden");
   // Transformer l'URL de navigation en logout
-  authLink.addEventListener("click", (event) => {
+  authLink.addEventListener("click", event => {
     // Empêcher le comportement de navigation par défaut.
     event.preventDefault();
     // Supprimer le token du localStorage.
