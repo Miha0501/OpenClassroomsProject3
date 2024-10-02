@@ -5,7 +5,6 @@ const innerModal = document.querySelector("#inner-modal");
 const openButton = document.querySelector("#edit-project");
 const closeButton = document.querySelector("#closeModalBtn");
 
-
 // Ouvrir le modal en cliquant sur le bouton
 openButton.addEventListener('click', async () => {
     modal.showModal();
@@ -36,19 +35,19 @@ function reRerenderWorks(works) {
 }
 
 // Fonction pour afficher les travaux.
- function renderWorksModal(works) {
+function renderWorksModal(works) {
     const gallery = document.querySelector(".gallery-modal");
     // Vider la galerie HTML
-     gallery.innerHTML = "";
-     // Boucler sur les travaux.
-     for (const work of works) {
-         //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail.
+    gallery.innerHTML = "";
+    // Boucler sur les travaux.
+    for (const work of works) {
+        //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail.
         //  const Fig = generateWorkModal(work);
-         const Fig = generateWork(work, false, true);
-         // Ajouter la "figure" à la galerie
-         gallery.appendChild(Fig);
-     }
- }
+        const Fig = generateWork(work, false, true);
+        // Ajouter la "figure" à la galerie
+        gallery.appendChild(Fig);
+    }
+}
 
 // Fonction pour envoyer une requête DELETE à l'API et supprimer le travail selon son ID
 async function deleteWork(workId) {
@@ -98,25 +97,6 @@ function renderPhotoBtn() {
     });
 }
 
-const inputs = [
-    document.querySelector("#title"),
-    document.querySelector("#category"),
-    document.querySelector("#image-upload")
-  ];
-  inputs.forEach(input => {
-    input.addEventListener("input", validateInputs);
-  });
-  function validateInputs() {
-    if (inputs.every(input => input.value)) {
-      document.querySelector("#submit").removeAttribute("disabled");
-      document.querySelector("#submit").style.backgroundColor = "#1D6154";
-      return true;
-    } 
-      document.querySelector("#submit").setAttribute("disabled", true);
-      document.querySelector("#submit").style.backgroundColor = "#B0B0B0";
-      return false;
-    
-  }
 // Appeler la fonction pour afficher le bouton
 renderPhotoBtn();
 
@@ -132,6 +112,7 @@ closeInnerModal.addEventListener('click', () => {
 const closeArrow = document.querySelector("#returnModalBtn");
 closeArrow.addEventListener('click', async () => {
     modal.showModal();
+    innerModal.close();
 });
 
 const uploadFrame = document.querySelector(".inner-modal-add-picture");
@@ -164,6 +145,32 @@ imageUploadInput.addEventListener("change", function () {
         reader.readAsDataURL(file); // lire le fichier en tant qu'URL de données
     }
 });
+
+const inputs = [
+    document.querySelector("#title"),
+    document.querySelector("#category"),
+    document.querySelector("#image-upload")
+];
+inputs.forEach(input => {
+    input.addEventListener("input", validateInputs);
+});
+function validateInputs() {
+    const maxFileSize = 4 * 1024 * 1024; // 4 mo en octets
+    // Vérification de la taille de l'image
+    if (imageUploadInput.files[0] && imageUploadInput.files[0].size > maxFileSize) {
+        document.querySelector("#error-size").textContent = "La taille de photo ne doit pas dépasser 4 mo";
+        return false // Considérer que le champs n'est pas rempli
+    }
+    if (inputs.every(input => input.value)) {
+        document.querySelector("#submit").removeAttribute("disabled");
+        document.querySelector("#submit").style.backgroundColor = "#1D6154";
+        return true;
+    } else {
+        document.querySelector("#submit").setAttribute("disabled", true);
+        document.querySelector("#submit").style.backgroundColor = "#B0B0B0";
+        return false;
+    }
+}
 
 // Fonction pour uploader une photo
 async function uploadPhoto(event) {

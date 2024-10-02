@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     authLink.textContent = token ? "logout" : "login";
     // Récupérer les travaux et les catégories via l'API et les afficher...
     data.works = await getWorks();
-    console.log(data.works);
     renderWorks(data.works);
     data.categories = await getCategories();
     // Si le token n'est pas défini ou à une valeur false, appeler la fonction renderFilters, seulement si l'utilisateur n'est pas connecté (pour les filtres de catégories).
@@ -66,6 +65,7 @@ function generateWork(work, withCaption, withDeleteBtn) {
         newFigcaption.innerText = work.title;
         newFig.appendChild(newFigcaption);
     }
+    // Générer la structure HTML d'un travail pour la galerie de la modale
     if (withDeleteBtn) {
         const deleteBtn = document.createElement("button");
      deleteBtn.classList.add("delete-btn");
@@ -140,7 +140,7 @@ function renderEditionMode() {
     authLink.addEventListener("click", event => {
         // Empêcher le comportement de navigation par défaut.
         event.preventDefault();
-        // Supprimer le token du localStorage.
+        // Supprimer le token du localStorage afin que le tkone soit supprimé lorsque l'utilisateur appuie sur logout
         localStorage.removeItem("token");
         // Recharger la page.
         window.location.reload();
