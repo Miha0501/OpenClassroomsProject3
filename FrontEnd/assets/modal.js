@@ -8,7 +8,6 @@ const closeButton = document.querySelector("#closeModalBtn");
 // Ouvrir le modal en cliquant sur le bouton
 openButton.addEventListener('click', async () => {
     modal.showModal();
-    data.works = await getWorks();
     renderWorksModal(data.works);
 });
 
@@ -87,6 +86,7 @@ function renderPhotoBtn() {
         modal.close();
         innerModal.showModal();
         const categorySelect = document.getElementById("category");
+        categorySelect.innerHTML="";
         data.categories.forEach(category => {
             const option = document.createElement("option");
             option.value = category.id;
@@ -96,7 +96,6 @@ function renderPhotoBtn() {
         addSubmitForm();
     });
 }
-
 // Appeler la fonction pour afficher le bouton
 renderPhotoBtn();
 
@@ -158,7 +157,7 @@ function validateInputs() {
     const maxFileSize = 4 * 1024 * 1024; // 4 mo en octets
     // Vérification de la taille de l'image
     if (imageUploadInput.files[0] && imageUploadInput.files[0].size > maxFileSize) {
-        document.querySelector("#error-size").textContent = "La taille de photo ne doit pas dépasser 4 mo";
+        document.querySelector("#error-size").textContent = "Erreur: La taille de photo ne doit pas dépasser 4 mo";
         return false // Considérer que le champs n'est pas rempli
     }
     if (inputs.every(input => input.value)) {
@@ -195,9 +194,9 @@ async function uploadPhoto(event) {
             data.works.push(work);
             reRerenderWorks(data.works);
             // Réinitialiser le formulaire.
-            event.target.reset();
+            event.target.reset(); 
             imageFrame.replaceChildren();
-            uploadFrame.style.display = "flex";
+            uploadFrame.style.display = "flex";// changer le style
             validateInputs();
             alert("Votre photo a bien été ajoutée");
         } else {

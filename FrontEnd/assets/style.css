@@ -286,8 +286,8 @@ nav li img:hover {
 }
 
 .gallery img {
-    max-width: 304px;
-    max-height: 405px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .filters {

@@ -47,7 +47,6 @@ function renderWorks(works) {
     for (const work of works) {
         //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail.
         const fig = generateWork(work, true, false);
-        // const fig = generateWork(work);
         // Ajouter la "figure" à la galerie
         gallery.appendChild(fig);
     }
