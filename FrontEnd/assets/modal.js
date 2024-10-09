@@ -1,10 +1,13 @@
 // MODAL
 
+// VARIABLES ET CONSTANTES
+// Les variables définies dans le fichier script.js sont aussi accessibles dans ce fichier (notamment data)
 const modal = document.querySelector("#modal");
 const innerModal = document.querySelector("#inner-modal");
 const openButton = document.querySelector("#edit-project");
 const closeButton = document.querySelector("#closeModalBtn");
 
+//LOGIQUE
 // Ouvrir le modal en cliquant sur le bouton
 openButton.addEventListener('click', async () => {
     modal.showModal();
@@ -18,7 +21,7 @@ closeButton.addEventListener('click', () => {
 
 // Fermer le modal en cliquant en dehors de celui-ci
 document.body.addEventListener('click', (event) => {
-    // Les marges de la modale sont considérés comme étant la modale, mais l'intérieure de la modale (le contenu) n'est pas considéré comme étant la modale (mais modal-wrapper).
+    // Les marges de la modale sont considérées comme étant la modale, mais l'intérieure de la modale (le contenu) n'est pas considéré comme étant la modale (mais modal-wrapper).
     if (modal.open && event.target === modal) {
         modal.close();
     }
@@ -27,21 +30,20 @@ document.body.addEventListener('click', (event) => {
     }
 });
 
-// Fonction pour reaficher les travaux dans la modale
+// Fonction pour réaficher les travaux dans la modale
 function reRerenderWorks(works) {
     renderWorks(works);
     renderWorksModal(works);
 }
 
-// Fonction pour afficher les travaux.
+// Fonction pour afficher les travaux
 function renderWorksModal(works) {
     const gallery = document.querySelector(".gallery-modal");
     // Vider la galerie HTML
     gallery.innerHTML = "";
-    // Boucler sur les travaux.
+    // Boucler sur les travaux
     for (const work of works) {
-        //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail.
-        //  const Fig = generateWorkModal(work);
+        //Générer une "figure" pour chaque travail avec la fonction generateWork en lui passant le travail
         const Fig = generateWork(work, false, true);
         // Ajouter la "figure" à la galerie
         gallery.appendChild(Fig);
@@ -59,6 +61,7 @@ async function deleteWork(workId) {
             body: JSON.stringify({ id: workId })
         });
         if (response.ok) {
+            // Afficher un nouveau tableau qui exclut le travail dont l'ID est égal à workId
             data.works = data.works.filter(work => work.id !== workId);
             reRerenderWorks(data.works);
         } else {
@@ -85,8 +88,11 @@ function renderPhotoBtn() {
     addBtn.addEventListener("click", () => {
         modal.close();
         innerModal.showModal();
+        // Créer une liste déroulante avec les éléments qui ont l'id "category"
         const categorySelect = document.getElementById("category");
+        // Vider la liste deroulante afin que les catégories ne se multiplient lorsque l'utilisateur charge plusieurs photos
         categorySelect.innerHTML="";
+        // Pour chaque élément du tableau créer un nouveau élément "option" avec la valeur "category.id" et le texte "category.name" et l'ajouter à la liste déroulante
         data.categories.forEach(category => {
             const option = document.createElement("option");
             option.value = category.id;
@@ -100,37 +106,42 @@ function renderPhotoBtn() {
 renderPhotoBtn();
 
 
-//************************************************************************* */
+//**************************************************************************/
 // INNER MODAL
-// Fermer le inner-modal en cliquant sur le bouton
+
+// VARIABLES ET CONSTANTES
 const closeInnerModal = document.querySelector("#closeInnerModalBtn");
+const closeArrow = document.querySelector("#returnModalBtn");
+const uploadFrame = document.querySelector(".inner-modal-add-picture");
+const imageFrame = document.querySelector(".inner-modal-image");
+const imageUploadInput = document.querySelector("#image-upload");
+
+// LOGIQUE
+// Fermer le inner-modal en cliquant sur le bouton
 closeInnerModal.addEventListener('click', () => {
     innerModal.close();
 });
+
 // Losque l'utilisateur appuie sur la fleche, la première modale s'ouvre
-const closeArrow = document.querySelector("#returnModalBtn");
 closeArrow.addEventListener('click', async () => {
     modal.showModal();
     innerModal.close();
 });
 
-const uploadFrame = document.querySelector(".inner-modal-add-picture");
-const imageFrame = document.querySelector(".inner-modal-image");
-const imageUploadInput = document.querySelector("#image-upload");
-
-// Affichage de la photo
+// Affichage de la fenêtre pour ajouter une photo
 uploadFrame.addEventListener("click", function (event) {
-    // En cliquant sur l'image, on simule un clic sur le bouton d'ajout de photo.
+    // En cliquant sur l'image, on simule un clic sur le bouton d'ajout de photo
     imageUploadInput.click();
 });
 imageFrame.addEventListener("click", function (event) {
-    // En cliquant sur l'image, on simule un clic sur le bouton d'ajout de photo.
+    // En cliquant sur l'image, on simule un clic sur le bouton d'ajout de photo
     imageFrame.click();
 });
+
 // Lorsqu'on a simulé le clic sur l'image, on peut choisir une photo.
 imageUploadInput.addEventListener("change", function () {
     const file = this.files[0]; // Récuperer le fichier
-    const reader = new FileReader(); // Créer un objet FileReader (lire le contenu du fichier en local sans envoie au serveur et le convertit en URL des donnée)
+    const reader = new FileReader(); // Créer un objet FileReader (lire le contenu du fichier en local et le convertir en URL des donnée sans l'envoyer au serveur)
     // Affichage de l'image après chargement
     reader.onload = function (event) {
         const image = document.createElement("img");
@@ -141,10 +152,11 @@ imageUploadInput.addEventListener("change", function () {
         uploadFrame.style.display = "none";
     };
     if (file) {
-        reader.readAsDataURL(file); // lire le fichier en tant qu'URL de données
+        reader.readAsDataURL(file); // Lire le fichier en tant qu'URL de données
     }
 });
 
+// Ajouter un écouteur d'événement input, qui est déclenché chaque fois que l'utilisateur modifie la valeur de ce champ
 const inputs = [
     document.querySelector("#title"),
     document.querySelector("#category"),
@@ -153,6 +165,8 @@ const inputs = [
 inputs.forEach(input => {
     input.addEventListener("input", validateInputs);
 });
+
+// Fonction pour vérifier si toutes les conditions de validation sont respectées
 function validateInputs() {
     const maxFileSize = 4 * 1024 * 1024; // 4 mo en octets
     // Vérification de la taille de l'image
@@ -160,14 +174,15 @@ function validateInputs() {
         document.querySelector("#error-size").textContent = "Erreur: La taille de photo ne doit pas dépasser 4 mo";
         return false // Considérer que le champs n'est pas rempli
     }
+    // Vérification s tous les champs du formilaire sont remplis
     if (inputs.every(input => input.value)) {
         document.querySelector("#submit").removeAttribute("disabled");
         document.querySelector("#submit").style.backgroundColor = "#1D6154";
-        return true;
+        return true;// Fonction que les conditions de validation sont remplis et rendre le bouton de validation actif
     } else {
         document.querySelector("#submit").setAttribute("disabled", true);
         document.querySelector("#submit").style.backgroundColor = "#B0B0B0";
-        return false;
+        return false; // Les conditions de validation ne sont pas remplis et indiquer que le bouton de validation est inactif
     }
 }
 
@@ -191,12 +206,13 @@ async function uploadPhoto(event) {
         });
         if (response.ok) {
             const work = await response.json();
-            data.works.push(work);
-            reRerenderWorks(data.works);
-            // Réinitialiser le formulaire.
+            data.works.push(work);// Ajouter la nouvelle image dans le tableau data.works
+            reRerenderWorks(data.works);// Réactualiser la galerie avec la nouvelle image
+            // Réinitialiser le champ d'ajout des photos
             event.target.reset(); 
             imageFrame.replaceChildren();
-            uploadFrame.style.display = "flex";// changer le style
+            uploadFrame.style.display = "flex";// Le rendre visible
+            // Après initialisation, rappeller la fonction qui vérifie que tous les champs du formulaire sont remplis et afficher une message de confirmation d'ajout de la photo
             validateInputs();
             alert("Votre photo a bien été ajoutée");
         } else {
